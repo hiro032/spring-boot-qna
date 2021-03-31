@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 @Controller
 @RequestMapping("/users")
 public class UserController {
+
     private UserRepository userRepository;
 
     UserController(UserRepository userRepository) {
@@ -24,13 +25,13 @@ public class UserController {
     }
 
     @GetMapping("")
-    public String userList(Model model) {
+    public String showUsers(Model model) {
         model.addAttribute("users",userRepository.getUsers());
         return "/user/list";
     }
 
     @GetMapping("/{userId}")
-    public String userProfile(@PathVariable String userId, Model model) {
+    public String showUser(@PathVariable String userId, Model model) {
         model.addAttribute("user", userRepository.findByUserId(userId));
         return "user/profile";
     }

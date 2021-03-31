@@ -2,6 +2,7 @@ package com.codessquad.qna.domain;
 
 public class Question {
 
+    private int index;
     private String title;
     private String writer;
     private String contents;
@@ -22,5 +23,13 @@ public class Question {
 
     public String getContents() {
         return contents;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
     }
 }
