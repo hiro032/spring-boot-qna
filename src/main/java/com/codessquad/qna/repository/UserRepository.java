@@ -17,4 +17,14 @@ public class UserRepository {
     public List<User> getUsers() {
         return users;
     }
+
+    public User findByUserId(String userId) {
+        for(User user : users) {
+            if(user.getUserId().equals(userId)) {
+                return user;
+            }
+        }
+        return null;
+    }
+
 }
