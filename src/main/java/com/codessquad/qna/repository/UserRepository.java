@@ -1,30 +1,11 @@
 package com.codessquad.qna.repository;
 
 import com.codessquad.qna.domain.User;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.List;
 
 @Repository
-public class UserRepository {
-    List<User> users = new ArrayList<>();
-
-    public void save(User user) {
-        users.add(user);
-    }
-
-    public List<User> getUsers() {
-        return users;
-    }
-
-    public User findByUserId(String userId) {
-        for(User user : users) {
-            if(user.getUserId().equals(userId)) {
-                return user;
-            }
-        }
-        return null;
-    }
-
+public interface UserRepository extends JpaRepository<User, Long> {
+    User findByUserId(String userId);
 }

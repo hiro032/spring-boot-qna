@@ -20,22 +20,23 @@ public class QuestionController {
     }
 
     @PostMapping
-    public String createQuestion(String title, String contents, String writer) {
-        Question question = new Question(title, writer, contents);
+    public String createQuestion(Question question) {
         questionRepository.save(question);
+
         return "redirect:/";
     }
 
     @GetMapping
     public String showQuestions(Model model) {
-        model.addAttribute("questions", questionRepository.getQuestions());
+        model.addAttribute("questions", questionRepository.findAll());
 
         return "/index";
     }
 
-    @GetMapping("/{index}")
-    public String showQuestion(@PathVariable int index, Model model) {
-        model.addAttribute("question", questionRepository.findByIndex(index));
+    @GetMapping("/{id}")
+    public String showQuestion(@PathVariable Long id, Model model) {
+        model.addAttribute("question", questionRepository.findById(id).get());
+
         return "qna/show";
     }
 
