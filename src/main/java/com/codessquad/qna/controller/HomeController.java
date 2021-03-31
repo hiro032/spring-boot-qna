@@ -8,6 +8,7 @@ public class HomeController {
 
     @GetMapping("/")
     public String goHome() {
-        return "/index";
+
+        return "forward:/questions";
     }
 }
