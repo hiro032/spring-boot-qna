@@ -8,11 +8,15 @@ import javax.servlet.http.HttpSession;
 public class HttpSessionUtils {
     private final static String USER_SESSION_KEY = "sessionedUser";
 
-    public static User getLoginUser(HttpSession session) {
-        User user = (User)session.getAttribute(USER_SESSION_KEY);
-        if(user == null){
+    public static void loginCheck(HttpSession session) {
+        if(session.getAttribute(USER_SESSION_KEY).equals(null)) {
             throw new NotLoginException();
         }
+    }
+
+    public static User getLoginUser(HttpSession session) {
+        loginCheck(session);
+        User user = (User)session.getAttribute(USER_SESSION_KEY);
         return user;
     }
 

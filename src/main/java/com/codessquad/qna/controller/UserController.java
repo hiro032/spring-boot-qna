@@ -1,7 +1,6 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.User;
-import com.codessquad.qna.exception.NotLoginException;
 import com.codessquad.qna.repository.UserRepository;
 import com.codessquad.qna.service.UserService;
 import com.codessquad.qna.utill.HttpSessionUtils;
@@ -31,7 +30,8 @@ public class UserController {
     }
 
     @GetMapping
-    public String showUsers(Model model) {
+    public String showUsers(Model model, HttpSession session) {
+        HttpSessionUtils.loginCheck(session);
         model.addAttribute("users",userService.findAll());
         return "/user/list";
     }
@@ -42,9 +42,13 @@ public class UserController {
         return "user/profile";
     }
 
-    @GetMapping("/{id}/form")
-    public String getUpdateForm(@PathVariable Long id, HttpSession session, Model model) {
-        model.addAttribute("user", userService.findById(id));
+    @GetMapping("/{checkId}/form")
+    public String getUpdateForm(@PathVariable Long checkId, HttpSession session, Model model) {
+        User user = HttpSessionUtils.getLoginUser(session);
+        if(!user.isMatchingId(checkId)) {
+            return "/user/updateFailed";
+        }
+        model.addAttribute("user", userService.findById(checkId));
         return "/user/updateForm";
     }
 
@@ -58,11 +62,6 @@ public class UserController {
         userService.save(user.update(newUser));
 
         return "redirect:/users";
-    }
-
-    @GetMapping("/login")
-    public String getLoginForm() {
-        return "/user/login";
     }
 
     @PostMapping("/login")
@@ -81,8 +80,5 @@ public class UserController {
         HttpSessionUtils.removeSession(session);
         return "redirect:/";
     }
-
-
-
 
 }

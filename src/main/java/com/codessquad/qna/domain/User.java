@@ -42,7 +42,6 @@ public class User {
     }
 
     public boolean isMatchingPassword(String checkPassword) {
-
         return this.password.equals(checkPassword);
     }
 
@@ -52,5 +51,9 @@ public class User {
         this.email = newUser.email;
 
         return this;
+    }
+
+    public boolean isMatchingId(Long checkId) {
+        return this.id.equals(checkId);
     }
 }
