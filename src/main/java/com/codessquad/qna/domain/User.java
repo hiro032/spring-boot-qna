@@ -10,7 +10,6 @@ public class User {
     @Id
     @GeneratedValue
     private Long id;
-
     private String userId;
     private String password;
     private String name;
@@ -43,14 +42,15 @@ public class User {
     }
 
     public boolean isMatchingPassword(String checkPassword) {
+
         return this.password.equals(checkPassword);
     }
 
     public User update(User newUser) {
+        this.password = newUser.password;
         this.name = newUser.name;
         this.email = newUser.email;
-        this.password = newUser.password;
+
         return this;
     }
-
 }
