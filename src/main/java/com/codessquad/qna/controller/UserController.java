@@ -1,7 +1,6 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.User;
-import com.codessquad.qna.repository.UserRepository;
 import com.codessquad.qna.service.UserService;
 import com.codessquad.qna.utill.HttpSessionUtils;
 import org.springframework.stereotype.Controller;
@@ -15,17 +14,16 @@ import javax.servlet.http.HttpSession;
 @RequestMapping(value = "/users")
 public class UserController {
 
-    private final UserRepository userRepository;
     private final UserService userService;
 
-    UserController(UserRepository userRepository, UserService userService) {
-        this.userRepository = userRepository;
+    UserController(UserService userService) {
         this.userService = userService;
     }
 
     @PostMapping
     public String createUser(User user) {
-        userRepository.save(user);
+        userService.save(user);
+
         return "redirect:/users";
     }
 
@@ -33,12 +31,14 @@ public class UserController {
     public String showUsers(Model model, HttpSession session) {
         HttpSessionUtils.loginCheck(session);
         model.addAttribute("users",userService.findAll());
+
         return "/user/list";
     }
 
     @GetMapping("/{userId}")
     public String showUser(@PathVariable String userId, Model model) {
         model.addAttribute("user", userService.findByUserId(userId));
+
         return "user/profile";
     }
 
@@ -46,9 +46,11 @@ public class UserController {
     public String getUpdateForm(@PathVariable Long checkId, HttpSession session, Model model) {
         User user = HttpSessionUtils.getLoginUser(session);
         if(!user.isMatchingId(checkId)) {
+
             return "/user/updateFailed";
         }
         model.addAttribute("user", userService.findById(checkId));
+
         return "/user/updateForm";
     }
 
@@ -72,12 +74,14 @@ public class UserController {
             return "/user/loginFailed";
         }
         HttpSessionUtils.setSession(user, session);
+
         return "redirect:/";
     }
 
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         HttpSessionUtils.removeSession(session);
+
         return "redirect:/";
     }
 

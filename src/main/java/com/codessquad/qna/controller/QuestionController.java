@@ -1,7 +1,6 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.Question;
-import com.codessquad.qna.repository.QuestionRepository;
 import com.codessquad.qna.service.QuestionService;
 import com.codessquad.qna.utill.HttpSessionUtils;
 import org.springframework.stereotype.Controller;
@@ -27,9 +26,7 @@ public class QuestionController {
     public String createQuestion(Question question, HttpSession session) {
         HttpSessionUtils.getLoginUser(session);
         questionService.post(question);
-        System.out.println("=======================");
-        System.out.println("QuestionController.createQuestion");
-        System.out.println("=======================");
+
         return "redirect:/";
     }
 
