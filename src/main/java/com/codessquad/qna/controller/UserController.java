@@ -1,8 +1,10 @@
 package com.codessquad.qna.controller;
 
 import com.codessquad.qna.domain.User;
+import com.codessquad.qna.exception.NotLoginException;
 import com.codessquad.qna.repository.UserRepository;
 import com.codessquad.qna.service.UserService;
+import com.codessquad.qna.utill.HttpSessionUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -41,7 +43,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}/form")
-    public String getUpdateForm(@PathVariable Long id, Model model) {
+    public String getUpdateForm(@PathVariable Long id, HttpSession session, Model model) {
         model.addAttribute("user", userRepository.findById(id).get());
         return "/user/updateForm";
     }
@@ -53,7 +55,6 @@ public class UserController {
         if(!user.isMatchingPassword(checkPassword)) {
             return "redirect:/";
         }
-
         userRepository.save(user.update(newUser));
 
         return "redirect:/users";
@@ -64,12 +65,19 @@ public class UserController {
         return "/user/login";
     }
 
-
     @PostMapping("/login")
     public String login(String userId, String password, HttpSession session) {
-        session.setAttribute("sessionedUser", userService.login(userId, password));
+        HttpSessionUtils.setSession(userService.login(userId, password), session);
         return "redirect:/";
     }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        HttpSessionUtils.removeSession(session);
+        return "redirect:/";
+    }
+
+
 
 
 }

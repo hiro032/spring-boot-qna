@@ -49,4 +49,11 @@ public class Question {
     public void setIndex(int index) {
         this.index = index;
     }
+
+    public Question updateQuestion(Question updateQuestion) {
+        this.title = updateQuestion.getTitle();
+        this.contents = updateQuestion.getContents();
+
+        return this;
+    }
 }
