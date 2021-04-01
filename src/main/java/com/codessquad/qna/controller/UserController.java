@@ -32,30 +32,30 @@ public class UserController {
 
     @GetMapping
     public String showUsers(Model model) {
-        model.addAttribute("users",userRepository.findAll());
+        model.addAttribute("users",userService.findAll());
         return "/user/list";
     }
 
     @GetMapping("/{userId}")
     public String showUser(@PathVariable String userId, Model model) {
-        model.addAttribute("user", userRepository.findByUserId(userId));
+        model.addAttribute("user", userService.findByUserId(userId));
         return "user/profile";
     }
 
     @GetMapping("/{id}/form")
     public String getUpdateForm(@PathVariable Long id, HttpSession session, Model model) {
-        model.addAttribute("user", userRepository.findById(id).get());
+        model.addAttribute("user", userService.findById(id));
         return "/user/updateForm";
     }
 
     @PostMapping("/{id}")
     public String updateUser(@PathVariable Long id, String checkPassword, User newUser) {
-        User user = userRepository.findById(id).get();
+        User user = userService.findById(id);
 
         if(!user.isMatchingPassword(checkPassword)) {
             return "redirect:/";
         }
-        userRepository.save(user.update(newUser));
+        userService.save(user.update(newUser));
 
         return "redirect:/users";
     }
@@ -67,7 +67,12 @@ public class UserController {
 
     @PostMapping("/login")
     public String login(String userId, String password, HttpSession session) {
-        HttpSessionUtils.setSession(userService.login(userId, password), session);
+        User user = userService.findByUserId(userId);
+
+        if(user == null || !user.isMatchingPassword(password)) {
+            return "/user/loginFailed";
+        }
+        HttpSessionUtils.setSession(user, session);
         return "redirect:/";
     }
 

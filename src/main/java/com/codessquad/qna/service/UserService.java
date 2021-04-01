@@ -4,6 +4,8 @@ import com.codessquad.qna.domain.User;
 import com.codessquad.qna.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserService {
     private final UserRepository userRepository;
@@ -12,13 +14,20 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public User login(String userId, String password) {
-        User user = userRepository.findByUserId(userId).orElseThrow(IllegalStateException::new);
-        if(!user.isMatchingPassword(password)) {
-            throw new IllegalStateException();
-        }
+    public void save(User user) {
+        userRepository.save(user);
+    }
 
-        return user;
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
+
+    public User findByUserId(String userId) {
+        return userRepository.findByUserId(userId);
+    }
+
+    public User findById(Long id) {
+        return userRepository.findById(id).orElseThrow(IllegalStateException::new);
     }
 
 
