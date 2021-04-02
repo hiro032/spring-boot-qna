@@ -57,7 +57,6 @@ public class UserController {
     @PostMapping("/{id}")
     public String updateUser(@PathVariable Long id, String checkPassword, User newUser) {
         User user = userService.findById(id);
-
         if(!user.isMatchingPassword(checkPassword)) {
             return "redirect:/";
         }
