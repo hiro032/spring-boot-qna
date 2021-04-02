@@ -44,7 +44,8 @@ public class QuestionController {
     }
 
     @GetMapping("/{id}/form")
-    public String getUpdateForm(@PathVariable Long id, Model model) {
+    public String getUpdateForm(@PathVariable Long id, Model model, HttpSession session) {
+        HttpSessionUtils.getLoginUser(session);
         model.addAttribute("question", questionService.findById(id));
 
         return "qna/updateForm";

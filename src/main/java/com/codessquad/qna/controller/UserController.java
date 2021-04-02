@@ -24,7 +24,7 @@ public class UserController {
     public String createUser(User user) {
         userService.save(user);
 
-        return "redirect:/users";
+        return "redirect:/";
     }
 
     @GetMapping
